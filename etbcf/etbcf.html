@@ -1,44 +1,47 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
-    <title>Eduardo T. Fernandes's Home Page</title>   
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css">
+  <title>Eduardo T. Fernandes's Home Page</title>
 </head>
+
 <body>
-    <div id="Header">
-        <table>
-            <tbody>
-                <tr>
-                    <td>Eduardo T. Fernandes's Home Page</td>
-                    <td>
-                        <script src="datestamp.js"></script>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+  <div id="Header">
+    <table>
+      <tbody>
+        <tr>
+          <td>Eduardo T. Fernandes's Home Page</td>
+          <td>
+            <script src="datestamp.js"></script>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="Menu">
+    <div class="hr-container">
+      <div class="hr-wrapper"></div>
+      <hr />
+      Home page
+      <hr />
+      <a href="https://validator.w3.org/nu/?doc=https://etbcf.github.io/">
+        <img src="https://www.w3.org/html/logo/downloads/HTML5_Logo_32.png" alt="Valid HTML5">
+      </a>
     </div>
-    <div id="Menu">
-        <div class="hr-container">
-            <div class="hr-wrapper"></div>
-                <hr>
-                Home page
-                <hr>
-                <a href="https://validator.w3.org/nu/?doc=https://etbcf.github.io/">
-                    <img src="https://www.w3.org/html/logo/downloads/HTML5_Logo_32.png" alt="Valid HTML5">
-                </a>
-        </div>
-    </div>
-    <!-- Icon for light theme (Moon) -->
-    <i id="light-icon" class="far fa-sun" onclick="toggleTheme()"></i>
+  </div>
+  <!-- Icon for light theme (Moon) -->
+  <i id="light-icon" class="far fa-sun" onclick="toggleTheme()"></i>
 
-    <!-- Icon for dark theme (Sun) -->
-    <i id="dark-icon" class="far fa-moon" onclick="toggleTheme()"></i>
+  <!-- Icon for dark theme (Sun) -->
+  <i id="dark-icon" class="far fa-moon" onclick="toggleTheme()"></i>
 
-    <!-- JavaScript for theme toggling -->
-    <script src="theme-toggle.js"></script>
+  <!-- JavaScript for theme toggling -->
+  <script src="theme-toggle.js"></script>
 </body>
+
 </html>
