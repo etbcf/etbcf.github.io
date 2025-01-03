@@ -4,8 +4,11 @@ function toggleTheme() {
     var lightIcon = document.getElementById("light-icon");
     var darkIcon = document.getElementById("dark-icon");
     
+    // Get the current background color using getComputedStyle
+    var currentBgColor = getComputedStyle(body).backgroundColor;
+    
     // Toggle body background color between #212121 and #ffffff
-    if (body.style.backgroundColor === "rgb(33, 33, 33)") {
+    if (currentBgColor === "rgb(33, 33, 33)" || currentBgColor === "#212121") {
         body.style.backgroundColor = "#ffffff";
         // Set text color of paragraphs to #212121
         for (var i = 0; i < paragraphs.length; i++) {
