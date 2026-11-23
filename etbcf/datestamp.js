@@ -1,83 +1,69 @@
-/*
- * Displays the last modification commit date for the current page.
- * Requires a public GitHub repository.
- */
-(() => {
-    "use strict";
+function pad(n) {
+    return (n < 10 ? "0" : "") + n;
+}
 
+async function date_lastmodified() {
+    // GitHub repository information
     const owner = "etbcf";
     const repo = "etbcf.github.io";
 
-    // Identify the HTML file currently being viewed.
-    const pathname = window.location.pathname.replace(/\/+$/, "");
+    // Identify the current HTML page
+    const pathname = window.location.pathname;
 
-    const pagePath = pathname.endsWith("/etbcf/etbcf.html")
+    const file = pathname.endsWith("/etbcf/etbcf.html")
         ? "etbcf/etbcf.html"
         : "index.html";
 
-    // Find the script element that loaded this file.
-    const scriptElement = document.currentScript;
+    // Request the latest commit affecting this particular file
+    const url =
+        `https://api.github.com/repos/${owner}/${repo}/commits?path=${encodeURIComponent(file)}&per_page=1`;
 
-    if (!scriptElement) {
-        console.error("Could not locate the date-stamp script.");
-        return;
-    }
-
-    // Create the timestamp where the script is located.
-    const dateElement = document.createElement("span");
-    dateElement.textContent = "Loading update date…";
-    scriptElement.replaceWith(dateElement);
-
-    // Ask GitHub for the latest commit affecting this specific file.
-    const apiUrl =
-        `https://api.github.com/repos/${owner}/${repo}/commits?path=${encodeURIComponent(pagePath)}&per_page=1`;
-
-    fetch(apiUrl, {
-        headers: {
-            Accept: "application/vnd.github+json"
-        },
-        cache: "no-store"
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`GitHub API error: ${response.status}`);
-            }
-
-            return response.json();
-        })
-        .then(commits => {
-            if (!Array.isArray(commits) || commits.length === 0) {
-                throw new Error(`No commits found for ${pagePath}`);
-            }
-
-            const commitDate =
-                commits[0].commit.committer?.date ||
-                commits[0].commit.author?.date;
-
-            if (!commitDate) {
-                throw new Error("Commit date unavailable.");
-            }
-
-            const date = new Date(commitDate);
-
-            dateElement.textContent = date.toLocaleString(undefined, {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false
-            });
-
-            dateElement.setAttribute(
-                "datetime",
-                date.toISOString()
-            );
-
-            dateElement.title = `Last update: ${pagePath}`;
-        })
-        .catch(error => {
-            console.error("Date stamp error:", error);
-            dateElement.textContent = "Update date unavailable";
+    try {
+        const response = await fetch(url, {
+            headers: {
+                "Accept": "application/vnd.github+json"
+            },
+            cache: "no-store"
         });
-})();
+
+        if (!response.ok) {
+            throw new Error("GitHub API error: " + response.status);
+        }
+
+        const commits = await response.json();
+
+        if (!commits.length) {
+            return "Unknown";
+        }
+
+        const commitDate = commits[0].commit.committer.date;
+        const d = new Date(commitDate);
+
+        if (isNaN(d.getTime())) {
+            return "Unknown";
+        }
+
+        const offset = -d.getTimezoneOffset();
+        const sign = offset >= 0 ? "+" : "-";
+        const hours = pad(Math.floor(Math.abs(offset) / 60));
+        const minutes = pad(Math.abs(offset) % 60);
+
+        return (
+            d.getFullYear() + "-" +
+            pad(d.getMonth() + 1) + "-" +
+            pad(d.getDate()) + " " +
+            pad(d.getHours()) + ":" +
+            pad(d.getMinutes()) +
+            " UTC" + sign + hours + ":" + minutes
+        );
+
+    } catch (error) {
+        console.error("Could not retrieve modification date:", error);
+        return "Unknown";
+    }
+}
+
+// Display the date where the script is called
+date_lastmodified().then(date => {
+    document.write(date);
+});
